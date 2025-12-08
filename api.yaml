@@ -1,0 +1,107 @@
+openapi: 3.1.1
+info:
+  title: DocNA API
+  version: 1.0.0
+
+servers:
+  - url: https://localhost:3000/v1/api/
+
+tags:
+  - name: patients
+    description: Gestion des patients
+  - name: doctors
+    description: Gestion des docteurs
+  - name: dispensary
+    description: Gestion des pharmacies
+  - name: prescriptions
+    description: Gestion des ordonnances
+
+paths:
+  /patients:
+    post:
+      tags: [patients]
+      summary: Créer un patient
+    get:
+      tags: [patients]
+      summary: Lister tous les patients
+    patch:
+      tags: [patients]
+      summary: Modifier un patient (par ID)
+    delete:
+      tags: [patients]
+      summary: Supprimer un patient (par ID)
+
+  /patient/{id}/prescriptions:
+    post:
+      tags: [patients]
+      summary: Ajouter une ou plusieurs ordonnances à un patient
+    get:
+      tags: [patients]
+      summary: Lister les ordonnances d'un patient
+    delete:
+      tags: [patients]
+      summary: Supprimer une ordonnance d'un patient
+
+  /doctors:
+    post:
+      tags: [doctors]
+      summary: Créer un docteur
+    get:
+      tags: [doctors]
+      summary: Lister tous les docteurs
+    patch:
+      tags: [doctors]
+      summary: Modifier un docteur (par ID)
+    delete:
+      tags: [doctors]
+      summary: Supprimer un docteur (par ID)
+
+  /doctorx/{id}/specialities:
+    post:
+      tags: [doctors]
+      summary: Associer une ou plusieurs spécialité à un médecin
+    get:
+      tags: [doctors]
+      summary: Lister les spécialités d'un médecin
+    delete:
+      tags: [doctors]
+      summary: Supprimer une spécialité d'un médecin
+      
+
+  /dispensary:
+    post:
+      tags: [dispensary]
+      summary: Créer une pharmacie
+    get:
+      tags: [dispensary]
+      summary: Lister toutes les pharmacies
+    patch:
+      tags: [dispensary]
+      summary: Modifier une pharmacie (par ID)
+    delete:
+      tags: [dispensary]
+      summary: Supprimer une pharmacie (par ID)
+
+  /prescriptions:
+    post:
+      tags: [prescriptions]
+      summary: Créer une ordonnance
+    get:
+      tags: [prescriptions]
+      summary: Lister toutes les ordonnances
+    patch:
+      tags: [prescriptions]
+      summary: Modifier une ordonnance (par ID)
+    delete:
+      tags: [prescriptions]
+      summary: Supprimer une ordonnance (par ID)
+
+security:
+  - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
