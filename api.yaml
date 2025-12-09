@@ -4,7 +4,7 @@ info:
   version: 1.0.0
 
 servers:
-  - url: https://localhost:3000/v1/api/
+  - url: https://localhost:3000/api/v1/
 
 tags:
   - name: patients
@@ -21,60 +21,262 @@ paths:
     post:
       tags: [patients]
       summary: Créer un patient
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatientCreate"
+      responses:
+        201:
+          description: Patient créé
     get:
       tags: [patients]
       summary: Lister tous les patients
+      responses:
+        200:
+          description: Liste des patients
+  
+  /patient/{id}:
+    get:
+      tags: [patients]
+      summary: Lister un patient (par ID)
+      responses:
+        200:
+          description: Objet d'un patient
     patch:
       tags: [patients]
       summary: Modifier un patient (par ID)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatientUpdate"
+      responses:
+        200:
+          description: Patient mis à jour
     delete:
       tags: [patients]
       summary: Supprimer un patient (par ID)
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Patient supprimé
 
   /patient/{id}/prescriptions:
     post:
       tags: [patients]
       summary: Ajouter une ou plusieurs ordonnances à un patient
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/PrescriptionCreate"
+      responses:
+        201:
+          description: Ordonnances ajoutées
     get:
       tags: [patients]
       summary: Lister les ordonnances d'un patient
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Liste des ordonnances du patient
     delete:
       tags: [patients]
       summary: Supprimer une ordonnance d'un patient
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+        - name: prescriptionId
+          in: query
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Ordonnance supprimée
 
   /doctors:
     post:
       tags: [doctors]
       summary: Créer un docteur
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DoctorCreate"
+      responses:
+        201:
+          description: Docteur créé
     get:
       tags: [doctors]
       summary: Lister tous les docteurs
+
+  /doctor/{id}:
+    get:
+      tags: [doctors]
+      summary: Lister un docteur (par ID)
+      responses:
+        200:
+          description: Objet d'un docteur
     patch:
       tags: [doctors]
       summary: Modifier un docteur (par ID)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DoctorUpdate"
+      responses:
+        200:
+          description: Docteur mis à jour
     delete:
       tags: [doctors]
       summary: Supprimer un docteur (par ID)
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Docteur supprimé
 
-  /doctorx/{id}/specialities:
+  /doctor/{id}/specialities:
     post:
       tags: [doctors]
-      summary: Associer une ou plusieurs spécialité à un médecin
+      summary: Associer une ou plusieurs spécialités à un médecin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/SpecialityDoctor"
+      responses:
+        201:
+          description: Spécialités ajoutées
+
     get:
       tags: [doctors]
       summary: Lister les spécialités d'un médecin
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Liste des spécialités
+
     delete:
       tags: [doctors]
       summary: Supprimer une spécialité d'un médecin
-      
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+        - name: specialityId
+          in: query
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Spécialité supprimée
+
+  /doctor/{id}/language:
+    post:
+      tags: [doctors]
+      summary: ajouter une langue a un medecin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+      responses:
+        201:
+          description: Langues ajoutées
+    get:
+      tags: [doctors]
+      summary: Lister les langues d'un médecin
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Liste des langues
+    delete:
+      tags: [doctors]
+      summary: Supprimer une langue d'un médecin
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+        - name: language
+          in: query
+          schema:
+            type: string
+      responses:
+        200:
+          description: Langue supprimée
 
   /dispensary:
     post:
       tags: [dispensary]
       summary: Créer une pharmacie
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DispensaryCreate"
     get:
       tags: [dispensary]
       summary: Lister toutes les pharmacies
+  /dispensary/{id}:
+    get:
+      tags: [dispensary]
+      summary: Lister une pharmacie (par ID)
+      responses:
+        200:
+          description: Objet d'une pharmacie
     patch:
       tags: [dispensary]
       summary: Modifier une pharmacie (par ID)
@@ -86,6 +288,11 @@ paths:
     post:
       tags: [prescriptions]
       summary: Créer une ordonnance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PrescriptionCreate"
     get:
       tags: [prescriptions]
       summary: Lister toutes les ordonnances
@@ -105,3 +312,113 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id: { type: integer }
+        first_name: { type: string }
+        last_name: { type: string }
+        email: { type: string }
+        password_hash: { type: string }
+        role: { type: integer }
+        created_at: { type: string, format: date-time }
+        phone_number: { type: string }
+        adress: { type: string }
+        city: { type: string }
+        country: { type: string }
+        id_card: { type: string }
+
+    Patient:
+      type: object
+      properties:
+        id_user: { type: integer }
+        social_security: { type: string }
+        date_of_birth: { type: string, format: date }
+
+    PatientCreate:
+      allOf:
+        - $ref: "#/components/schemas/User"
+        - $ref: "#/components/schemas/Patient"
+
+    PatientUpdate:
+      type: object
+      properties:
+        first_name: { type: string }
+        last_name: { type: string }
+        phone_number: { type: string }
+        adress: { type: string }
+        city: { type: string }
+        country: { type: string }
+
+    Doctor:
+      type: object
+      properties:
+        id_user: { type: integer }
+        consultation_price: { type: number }
+        siret_number: { type: string }
+        hourly: { type: string }
+        profile_picture: { type: string }
+        pro_card: { type: string }
+
+    DoctorCreate:
+      allOf:
+        - $ref: "#/components/schemas/User"
+        - $ref: "#/components/schemas/Doctor"
+
+    DoctorUpdate:
+      type: object
+      properties:
+        consultation_price: { type: number }
+        hourly: { type: string }
+        siret_number: { type: string }
+
+    Speciality:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+
+    SpecialityDoctor:
+      type: object
+      properties:
+        id_speciality: { type: integer }
+        consultation_time_min: { type: string, format: date }
+        consultation_time_max: { type: string, format: date }
+        price_min: { type: number }
+        price_max: { type: number }
+        id_currency: { type: integer }
+        is_active: { type: boolean }
+
+    Prescription:
+      type: object
+      properties:
+        id: { type: integer }
+        id_patient: { type: integer }
+        id_doctor: { type: integer }
+        path: { type: string }
+        creation_date: { type: string, format: date }
+        validation_date: { type: string, format: date }
+        isRenew: { type: boolean }
+        renew_number: { type: integer }
+
+    PrescriptionCreate:
+      type: object
+      required: [id_patient, id_doctor, path, creation_date, validation_date, isRenew]
+      properties:
+        id_patient: { type: integer }
+        id_doctor: { type: integer }
+        path: { type: string }
+        creation_date: { type: string, format: date }
+        validation_date: { type: string, format: date }
+        isRenew: { type: boolean }
+        renew_number: { type: integer }
+
+    DispensaryCreate:
+      type: object
+      properties:
+        id_user: { type: integer }
+        license_pharmacy: { type: string }
+        hourly: { type: string }
+        siret_number: { type: string }
