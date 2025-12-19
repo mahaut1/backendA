@@ -1,0 +1,19 @@
+DocNA – Backend A (Identités & Référentiel Médecins)
+
+Ce dépôt contient le Backend A du projet DocNA, une plateforme de prise de rendez-vous médicaux conçue pour fonctionner dans un contexte multi-villes, multilingue (FR / EN / AR) et multi-acteurs (patients, médecins, pharmacies). Le projet est réalisé dans un cadre pédagogique et vise à mettre en œuvre une architecture backend professionnelle, sécurisée et documentée.
+
+Le Backend A est responsable de la gestion des identités (création de comptes patients, médecins et pharmacies), de l’authentification et de l’autorisation via JWT, ainsi que du référentiel des médecins (spécialités, langues parlées, localisation). Il expose des API REST destinées à être consommées par le Frontend et par un second backend dédié à la gestion des rendez-vous et des notifications.
+
+Le projet répond à un besoin de fiabilité dans la prise de rendez-vous médicaux, notamment pour des utilisateurs mobiles, multilingues et soumis à des contraintes de connectivité. Les objectifs principaux sont de permettre aux patients de rechercher et filtrer des médecins selon plusieurs critères (ville, spécialité, langue), de sécuriser les données selon des bonnes pratiques inspirées du RGPD, de faciliter l’onboarding des professionnels de santé et de permettre l’échange d’informations avec les pharmacies.
+
+Le périmètre du MVP inclut la création et la gestion de comptes utilisateurs, l’annuaire des médecins et des pharmacies, les fonctionnalités de recherche et de filtrage, ainsi que l’exposition d’API documentées. Les fonctionnalités hors scope du MVP sont le dossier médical patient et la téléconsultation vidéo.
+
+L’architecture repose sur une approche micro-services avec une séparation claire des responsabilités. Le Backend A est développé en Node.js avec Express, utilise PostgreSQL comme base de données relationnelle et JWT pour la sécurité. Les échanges sont réalisés via des API REST documentées avec OpenAPI 3.1. Le projet est conteneurisé avec Docker afin de faciliter le déploiement et l’évaluation.
+
+La structure du projet est organisée de manière modulaire avec des dossiers dédiés aux modèles, contrôleurs, routes, middlewares et utilitaires. Les migrations de base de données sont gérées avec node-pg-migrate et des scripts SQL sont fournis pour l’initialisation et les données de test.
+
+L’ensemble des routes disponibles est documenté dans le fichier api.yaml, qui sert de contrat entre le backend, le frontend et les autres services. Cette documentation permet de comprendre rapidement les endpoints exposés, les paramètres attendus, les schémas de données et les règles de sécurité.
+
+Pour lancer le projet, il est nécessaire d’avoir Node.js (version 18 ou supérieure), Docker et Docker Compose. Après installation des dépendances avec npm install, il faut créer un fichier .env contenant les variables d’environnement (PORT, DATABASE_URL, JWT_SECRET). Le projet peut ensuite être lancé avec docker-compose up --build ou, sans Docker, en appliquant les migrations puis en lançant le serveur avec npm run dev.
+
+Le projet met l’accent sur la qualité logicielle, la clarté de l’architecture, la sécurité des données et la coordination entre les équipes backend et frontend. Il s’inscrit dans un cadre académique visant à reproduire des conditions de développement proches du monde professionnel, avec une attention particulière portée à la documentation, aux bonnes pratiques et à la maintenabilité du code.
